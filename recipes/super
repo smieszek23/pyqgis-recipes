@@ -1,0 +1,22 @@
+def super_funkcja(atrybut, odleglosc_max):
+    warstwa = iface.activeLayer()
+
+    if warstwa.selectedFeatureCount() == 1:
+        obiekt = warstwa.selectedFeatures()[0]
+
+        zaznacz = []
+        for cos in warstwa.getFeatures():
+            if obiekt.attribute(atrybut) == cos.attribute(atrybut):
+                zaznacz.append(cos)
+
+        for cos in list(zaznacz):
+            odl = obiekt.geometry().distance(cos.geometry())
+            if odl > odleglosc_max:
+                zaznacz.remove(cos)
+
+        zaznaczId = [cos.id() for cos in zaznacz]
+        zaznaczId.remove(obiekt.id())
+
+        warstwa.modifySelection(zaznaczId, [obiekt.id()])
+    else :
+        print "Zaznacz tylko jeden ficzer!"
